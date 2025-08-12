@@ -1,5 +1,5 @@
 {
-    "name": "Trackpad",
+    "name": "TrackpadPlugin",
     "rootNamespace": "",
     "references": [],
     "includePlatforms": [],
