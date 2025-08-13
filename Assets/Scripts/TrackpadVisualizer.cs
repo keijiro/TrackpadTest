@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UIElements;
+using TouchPoint = TrackpadPlugin.TouchPoint;
 
 public class TrackpadVisualizer : MonoBehaviour
 {
@@ -8,17 +9,25 @@ public class TrackpadVisualizer : MonoBehaviour
     VisualElement _area;
     Label[] _indicators;
 
-    void Start()
-      => CreateUI();
+    void HidaIndicator(Label indicator)
+      => indicator.style.display = DisplayStyle.None;
 
-    void CreateUI()
+    void UpdateIndicator(Label indicator, in TouchPoint touch)
+    {
+        indicator.style.display = DisplayStyle.Flex;
+        indicator.style.left = Length.Percent(touch.normalizedX * 100);
+        indicator.style.bottom = Length.Percent(touch.normalizedY * 100);
+        indicator.transform.scale = Vector3.one * touch.force;
+    }
+
+    void Start()
     {
         var root = GetComponent<UIDocument>().rootVisualElement;
 
         _area = root.Q("trackpad-area");
         _indicators = new Label[10];
 
-        for (int i = 0; i < _indicators.Length; i++)
+        for (var i = 0; i < _indicators.Length; i++)
         {
             var e = new Label();
             e.AddToClassList("indicator");
@@ -34,22 +43,10 @@ public class TrackpadVisualizer : MonoBehaviour
     {
         var touches = trackpadInput.CurrentTouches;
 
-        for (int i = 0; i < _indicators.Length; i++)
-        {
-            var indicator = _indicators[i];
+        for (var i = 0; i < touches.Length; i++)
+            UpdateIndicator(_indicators[i], touches[i]);
 
-            if (i >= touches.Length)
-            {
-                indicator.style.display = DisplayStyle.None;
-                continue;
-            }
-
-            var touch = touches[i];
-
-            indicator.style.display = DisplayStyle.Flex;
-            indicator.style.left = Length.Percent(touch.normalizedX * 100);
-            indicator.style.bottom = Length.Percent(touch.normalizedY * 100);
-            indicator.transform.scale = Vector3.one * touch.force;
-        }
+        for (var i = touches.Length; i < _indicators.Length; i++)
+            HidaIndicator(_indicators[i]);
     }
 }
