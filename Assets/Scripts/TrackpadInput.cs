@@ -4,13 +4,13 @@ using UnityEngine.Assertions;
 
 public sealed class TrackpadInput : MonoBehaviour
 {
-    TrackpadPluginHandle pluginHandle;
+    TrackpadPluginHandle _pluginHandle;
 
     public bool IsAvailable
-      => pluginHandle?.IsAvailable == true;
+      => _pluginHandle?.IsAvailable == true;
 
     public ReadOnlySpan<TrackpadPlugin.TouchPoint> CurrentTouches
-      => IsAvailable ? pluginHandle.GetTouches() :
+      => IsAvailable ? _pluginHandle.GetTouches() :
                        ReadOnlySpan<TrackpadPlugin.TouchPoint>.Empty;
 
     void Awake()
@@ -21,9 +21,9 @@ public sealed class TrackpadInput : MonoBehaviour
 
         try
         {
-            pluginHandle = TrackpadPluginHandle.Create();
+            _pluginHandle = TrackpadPluginHandle.Create();
 
-            if (pluginHandle == null || pluginHandle.IsInvalid)
+            if (_pluginHandle == null || _pluginHandle.IsInvalid)
                 Debug.LogWarning("TrackpadInput: Failed to initialize.");
         }
         catch (Exception e)
@@ -34,10 +34,10 @@ public sealed class TrackpadInput : MonoBehaviour
 
     void OnDestroy()
     {
-        if (!pluginHandle?.IsInvalid ?? false)
+        if (!_pluginHandle?.IsInvalid ?? false)
         {
-            pluginHandle.Dispose();
-            pluginHandle = null;
+            _pluginHandle.Dispose();
+            _pluginHandle = null;
         }
     }
 }
