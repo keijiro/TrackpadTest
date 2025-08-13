@@ -35,6 +35,10 @@ public class TrackpadVisualizer : MonoBehaviour
             e.AddToClassList("indicator");
             area.Add(e);
         }
+
+#if !UNITY_EDITOR
+        UnityEngine.Cursor.visible = false;
+#endif
     }
 
     void Update()
