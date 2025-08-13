@@ -3,6 +3,8 @@ using UnityEngine.UIElements;
 
 public class TrackpadVisualizer : MonoBehaviour
 {
+    [SerializeField] TrackpadInput trackpadInput = null;
+
     UIDocument uiDocument;
     VisualElement root;
     VisualElement trackpadArea;
@@ -92,8 +94,7 @@ public class TrackpadVisualizer : MonoBehaviour
     {
         if (trackpadArea == null || touchIndicators == null) return;
 
-        var trackpadInput = TrackpadInput.Instance;
-        if (!trackpadInput.IsAvailable)
+        if (trackpadInput == null || !trackpadInput.IsAvailable)
         {
             infoLabel.text = "Trackpad not available";
             return;

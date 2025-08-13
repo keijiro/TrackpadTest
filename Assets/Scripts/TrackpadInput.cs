@@ -1,59 +1,40 @@
 using System;
 using UnityEngine;
+using UnityEngine.Assertions;
 
-public class TrackpadInput : MonoBehaviour
+public sealed class TrackpadInput : MonoBehaviour
 {
-    static TrackpadInput instance;
     TrackpadPluginHandle pluginHandle;
 
-    public static TrackpadInput Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                var go = new GameObject("TrackpadInput");
-                instance = go.AddComponent<TrackpadInput>();
-                DontDestroyOnLoad(go);
-            }
-            return instance;
-        }
-    }
+    public bool IsAvailable
+      => pluginHandle?.IsAvailable == true;
 
-    public bool IsAvailable => pluginHandle?.IsAvailable == true;
-    public ReadOnlySpan<TrackpadPlugin.TouchPoint> CurrentTouches => IsAvailable ? pluginHandle.GetTouches() : ReadOnlySpan<TrackpadPlugin.TouchPoint>.Empty;
+    public ReadOnlySpan<TrackpadPlugin.TouchPoint> CurrentTouches
+      => IsAvailable ? pluginHandle.GetTouches() :
+                       ReadOnlySpan<TrackpadPlugin.TouchPoint>.Empty;
 
     void Awake()
     {
-        if (instance != null && instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        instance = this;
-        Initialize();
-    }
+        var trackpadInputs = FindObjectsByType<TrackpadInput>(FindObjectsSortMode.None);
+        Assert.IsTrue(trackpadInputs.Length == 1,
+                      "Multiple TrackpadInput components found in the scene.");
 
-    void Initialize()
-    {
         try
         {
             pluginHandle = TrackpadPluginHandle.Create();
 
             if (pluginHandle == null || pluginHandle.IsInvalid)
-            {
-                Debug.LogWarning("TrackpadInput: Failed to initialize. Check Input Monitoring permissions in System Settings.");
-            }
+                Debug.LogWarning("TrackpadInput: Failed to initialize.");
         }
         catch (Exception e)
         {
-            Debug.LogError($"TrackpadInput: Failed to load native plugin: {e.Message}");
+            Debug.LogError($"TrackpadInput: {e.Message}");
         }
     }
 
     void OnDestroy()
     {
-        if (pluginHandle != null && !pluginHandle.IsInvalid)
+        if (!pluginHandle?.IsInvalid ?? false)
         {
             pluginHandle.Dispose();
             pluginHandle = null;
