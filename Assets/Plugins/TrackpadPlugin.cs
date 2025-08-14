@@ -35,7 +35,7 @@ public static class TrackpadPlugin
     public unsafe struct TouchData
     {
         public int touchCount;
-        public fixed byte touchesBuffer[10 * 32]; // 10 TouchPoints * 32 bytes each
+        public fixed byte touchesBuffer[32 * 32]; // 32 TouchPoints * 32 bytes each
 
         public Span<TouchPoint> GetTouches()
         {
@@ -49,7 +49,7 @@ public static class TrackpadPlugin
         {
             fixed (byte* ptr = touchesBuffer)
             {
-                return new Span<TouchPoint>(ptr, 10);
+                return new Span<TouchPoint>(ptr, 32);
             }
         }
     }

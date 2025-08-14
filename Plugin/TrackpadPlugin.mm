@@ -15,7 +15,7 @@ static bool g_isRunning = false;
 static int MultitouchCallback(int device, mtTouch* touches, int numTouches, double timestamp, int frame) {
     std::lock_guard<std::mutex> lock(g_touchDataMutex);
     
-    g_currentTouchData.touchCount = std::min(numTouches, 10);
+    g_currentTouchData.touchCount = std::min(numTouches, 32);
     
     for (int i = 0; i < g_currentTouchData.touchCount; i++) {
         TouchPoint& point = g_currentTouchData.touches[i];

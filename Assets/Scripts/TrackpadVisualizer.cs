@@ -27,7 +27,7 @@ public class TrackpadVisualizer : MonoBehaviour
 
     void Start()
     {
-        _indicators = Enumerable.Range(0, 10).Select(i => new Label()).ToArray();
+        _indicators = Enumerable.Range(0, 32).Select(i => new Label()).ToArray();
 
         var area = GetComponent<UIDocument>().rootVisualElement.Q("trackpad-area");
         foreach (var e in _indicators)

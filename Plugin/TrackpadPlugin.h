@@ -17,7 +17,7 @@ typedef struct {
 
 typedef struct {
     int touchCount;
-    TouchPoint touches[10]; // Max 10 simultaneous touches
+    TouchPoint touches[32]; // Max 32 simultaneous touches
 } TouchData;
 
 // Initialize the trackpad monitoring
