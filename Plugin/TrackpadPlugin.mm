@@ -27,15 +27,6 @@ static int MultitouchCallback(int device, mtTouch* touches, int numTouches, doub
         point.force = touch.density;
         point.majorRadius = touch.majorAxis;
         point.minorRadius = touch.minorAxis;
-        
-        switch (touch.state) {
-            case 1: point.phase = 0; break; // Began
-            case 2: point.phase = 1; break; // Moved
-            case 3: point.phase = 2; break; // Stationary
-            case 4: point.phase = 3; break; // Ended
-            case 5: point.phase = 4; break; // Cancelled
-            default: point.phase = 1; break;
-        }
     }
     
     return 0;

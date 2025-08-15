@@ -12,7 +12,6 @@ typedef struct {
     float force;
     float majorRadius;
     float minorRadius;
-    int phase; // 0=Began, 1=Moved, 2=Stationary, 3=Ended, 4=Cancelled
 } TouchPoint;
 
 typedef struct {

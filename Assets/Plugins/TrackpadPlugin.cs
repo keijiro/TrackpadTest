@@ -28,7 +28,6 @@ public static class TrackpadPlugin
         public float force;
         public float majorRadius;
         public float minorRadius;
-        public int phase;
     }
 
     [StructLayout(LayoutKind.Sequential)]
